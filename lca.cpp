@@ -23,8 +23,8 @@ node* lca(node* root, node* p, node* q) {
         if(root==p || root==q){
             return root;
         }
-        auto left = lowestCommonAncestor(root->left, p, q);
-        auto right = lowestCommonAncestor(root->right, p, q);
+        auto left = lca(root->left, p, q);
+        auto right = lca(root->right, p, q);
         
         if(left && right){
             return root;
