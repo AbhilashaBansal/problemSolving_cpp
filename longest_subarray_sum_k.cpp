@@ -2,7 +2,7 @@
 using namespace std;
 #define ll long long int
 
-int longestConsecSubseq(int a[], int n, int k=0){
+int longestSubSumK(int a[], int n, int k=0){
     unordered_map <int, int> m;
     ll pre=0; 
     int len=0;
@@ -31,6 +31,6 @@ int main() {
     int *a = new int[n];
     for(int i=0; i<n; i++) cin>>a[i];
     
-    cout<<longestConsecSubseq(a, n, k);
+    cout<<longestSubSumK(a, n, k);
     return 0;
 }
