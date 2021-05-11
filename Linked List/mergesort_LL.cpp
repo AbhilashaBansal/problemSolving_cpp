@@ -1,4 +1,5 @@
-// merge sort on 
+// merge sort on Linked Lists
+// O(nlogn)
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -14,52 +15,89 @@ class node{
     }
 };
 
-node* merge(node* first_ll, node* sec_ll) {
-    node* temp_h = new node(0);
-    node* head = temp_h;
-    while(first_ll!=NULL && sec_ll!=NULL){
-        if(first_ll->data < sec_ll->data){
-            temp_h->next = new node(first_ll->data);
-            first_ll = first_ll->next;
-        }
-        else{
-            temp_h->next = new node(sec_ll->data);
-            sec_ll = sec_ll->next;
-        }
-        temp_h = temp_h->next;
+// recursive merge
+node* mergeRec(node* a, node* b){
+    if(a==NULL) return b;
+    if(b==NULL) return a;
+
+    node* c;
+    if(a->data<=b->data){
+        c=a;
+        c->next = mergeRec(a->next, b);
     }
-    while(first_ll!=NULL){
-        temp_h->next = new node(first_ll->data);
-        first_ll = first_ll->next;
-        temp_h = temp_h->next;
+    else{
+        c=b;
+        c->next = mergeRec(a, b->next);
     }
-    while(sec_ll!=NULL){
-        temp_h->next = new node(sec_ll->data);
-        sec_ll = sec_ll->next;
-        temp_h = temp_h->next;
-    }
-    return head->next;
+    return c;
 }
 
-node* mergeSort(node *head){
-    if(head->next==NULL) return head; // 1 membered list always sorted
+// iterative merge
+node* merge (node* first, node* sec) {
+    if(first==NULL) return sec;
+    if(sec==NULL) return first;
+
+    node* head=NULL, *temp=NULL;
+    
+    while(first!=NULL && sec!=NULL){
+        if(first->data <= sec->data){
+            if(head==NULL){
+                head = temp = first;
+            }
+            else{
+                temp->next = first;
+                temp = temp->next; // moving temp pointer forward
+            }
+            first = first->next; // covered a node 
+        }
+        else{
+            if(head==NULL){
+                head = temp = sec;
+            }
+            else{
+                temp->next = sec;
+                temp = temp->next;
+            }
+            sec = sec->next;
+        }
+    }
+
+    if(first!=NULL){
+        temp->next = first;
+        first=NULL;
+    }
+    if(sec!=NULL){
+        temp->next = sec;
+        sec = NULL;
+    }
+
+    return head;
+}
+
+node* mergeSort(node *head) {
+    // 0 or 1 membered list always sorted
+    if(head==NULL || head->next==NULL) return head; 
     
     node* slow = head;
     node* fast = head;
+    // 1 divide into 2 LLs
+    //can also be done in a separate fn that finds out mid pt
     while(fast->next!=NULL && fast->next->next!=NULL){
         slow = slow->next;
         fast = fast->next->next;
     }
-    node* first_ll = head;
-    node* sec_ll = slow->next;
+    node* first = head;
+    node* sec = slow->next;
     slow->next = NULL; // to separate the LL into 2 diff LLs
     
-    first_ll = mergeSort(first_ll);
-    sec_ll = mergeSort(sec_ll);
+    // 2 recursively sort 2 LLs
+    first = mergeSort(first);
+    sec = mergeSort(sec);
     
-    // merge the two
-    node* fin_head = merge(first_ll, sec_ll);
-    return fin_head;
+    // 3 merge the two LL
+    // node* result = merge(first, sec);
+    node* result = mergeRec(first, sec);
+    return result;
 }
 
 void printLL(node* head){
