@@ -1,3 +1,8 @@
+// WORD BREAK 1
+// O(N^2)
+// We have to fill a dp array of size N, and to fill each entry, we must iterate over dp table from i+1 .... N
+// Hence, Time Complexity will be O(N^2)
+
 #include <bits/stdc++.h>
 using namespace std;
 
