@@ -1,3 +1,10 @@
+// WORD BREAK 2
+// O(N.2^N) solution
+// We can optimise little bit by using DP, which may result in shorter running time, but even after using DP, upper bound of time c remains O(N*(2^N))
+// since in worst case, we may have to generate 2^N combinations
+// eg: dictionary = {a, aa, aaa, aaaa ...}
+// input string = aaaaaaaa
+
 #include <bits/stdc++.h>
 using namespace std;
 
