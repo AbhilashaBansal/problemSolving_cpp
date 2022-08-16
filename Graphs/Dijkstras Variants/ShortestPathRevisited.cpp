@@ -1,9 +1,9 @@
 // SHORTEST PATH REVISITED
 
-// Fortunately, to our rescue we have K special offers, which means while travelling from City 1 to any other city we can select at-most K roads and we will not be charged for using those roads. 
+// (Fortunately, to our rescue we have K special offers, which means while travelling from City 1 to any other city we can select at-most K roads and we will not be charged for using those roads.) 
 
-
-// Find the shortest path from 0 to every other node, given that we can skip 
+// Basically:
+// Find the shortest path from 0 to every other node, given that we can skip at most K edge weights (individually for every destination, not as a whole).
 
 #include <iostream>
 #include <vector>
@@ -17,7 +17,6 @@ int main() {
 	cin>>n>>m>>k;
 
 	vector<vector<pair<int, int> > > adj(n);
-
 	for(int i=1; i<=m; i++){
 		int a, b, wt;
 		cin>>a>>b>>wt;
@@ -28,10 +27,13 @@ int main() {
 		adj[b].push_back(make_pair(a, wt));
 	}
 
-	// src is 0
+	// Dijkstra's algorithm with src as 0
+	
+	// Instead of dist[n], we'll need dist[n][k+1] 
+	// dist[i][j] -> minimum distance from 0 to i, after having used j offers (0<=j<=k)
 	vector<vector<int> > dist(n, vector<int>(k+1, INT_MAX));
+	
 	set<pair<int, pair<int, int> > > sttt;
-
 	sttt.insert({0, {0, 0}});
 
 	while(!sttt.empty()){
@@ -45,7 +47,7 @@ int main() {
 		dist[node][offersUsed] = d;
 
 		for(auto nbr: adj[node]){
-			// donot use an offer
+			// donot use an offer for this edge
 			int nayaDist = d + nbr.second;
 			int puranaDist = dist[nbr.first][offersUsed];
 			if(nayaDist<puranaDist){
@@ -57,7 +59,7 @@ int main() {
 				dist[nbr.first][offersUsed] = nayaDist;
 			}
 
-			// use an offer
+			// use an offer for this edge
 			if(offersUsed<k){
 				int nayaDist2 = d;
 				int puranaDist2 = dist[nbr.first][offersUsed+1];
